@@ -3,8 +3,6 @@
  * Homepage.
  */
 get_header();
-$lawn   = gamely_tools_in( 'lawn' );
-$garden = gamely_tools_in( 'garden' );
 $all    = gamely_tools();
 $soon   = function_exists( 'gl_tools_coming_soon' ) ? gl_tools_coming_soon() : array();
 ?>
@@ -59,10 +57,12 @@ $soon   = function_exists( 'gl_tools_coming_soon' ) ? gl_tools_coming_soon() : a
 
 	<div id="tools"></div>
 	<?php
-	$groups = array(
-		'lawn'   => array( __( 'Lawn tools', 'gamely' ), $lawn ),
-		'garden' => array( __( 'Garden tools', 'gamely' ), $garden ),
-	);
+	$groups = array();
+	foreach ( array_keys( gamely_categories() ) as $group_cat ) {
+		$groups[ $group_cat ] = array( gamely_cat_label( $group_cat ), gamely_tools_in( $group_cat ) );
+	}
+	$filled   = array_keys( array_filter( $groups, function ( $g ) { return (bool) $g[1]; } ) );
+	$last_cat = end( $filled );
 	$i = 0;
 	foreach ( $groups as $cat => $group ) :
 		if ( ! $group[1] ) {
@@ -83,7 +83,7 @@ $soon   = function_exists( 'gl_tools_coming_soon' ) ? gl_tools_coming_soon() : a
 						<span class="g-card__cta"><?php echo esc_html( $tool['cta'] ); ?> →</span>
 					</a>
 				<?php endforeach; ?>
-				<?php if ( 'garden' === $cat && $soon ) : ?>
+				<?php if ( $last_cat === $cat && $soon ) : ?>
 					<div class="g-card g-card--soon">
 						<span class="g-card__title"><?php esc_html_e( 'Coming soon', 'gamely' ); ?></span>
 						<span class="g-card__text"><?php echo esc_html( implode( ' · ', $soon ) ); ?></span>

@@ -7,7 +7,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'GAMELY_VERSION', '1.1.1' );
+define( 'GAMELY_VERSION', '1.2.0' );
 
 /* ---------------------------------------------------------------
  * Setup
@@ -95,8 +95,18 @@ function gamely_current_tool() {
 	return null;
 }
 
-function gamely_cat_label( $cat ) {
-	return 'lawn' === $cat ? __( 'Lawn tools', 'gamely' ) : __( 'Garden tools', 'gamely' );
+/** Tool categories in display order, with menu and short labels. */
+function gamely_categories() {
+	return array(
+		'lawn'   => array( __( 'Lawn tools', 'gamely' ), __( 'Lawn', 'gamely' ) ),
+		'garden' => array( __( 'Garden tools', 'gamely' ), __( 'Garden', 'gamely' ) ),
+		'yard'   => array( __( 'Yard tools', 'gamely' ), __( 'Yard', 'gamely' ) ),
+	);
+}
+
+function gamely_cat_label( $cat, $short = false ) {
+	$cats = gamely_categories();
+	return isset( $cats[ $cat ] ) ? $cats[ $cat ][ $short ? 1 : 0 ] : ucfirst( $cat );
 }
 
 /* ---------------------------------------------------------------
@@ -164,7 +174,7 @@ function gamely_site_links() {
 add_action( 'wp_head', function () {
 	$desc = '';
 	if ( is_front_page() ) {
-		$desc = __( 'Free lawn, garden and yard calculators for homeowners: sprinkler run times, fertilizer, lime, raised bed soil and square foot garden planning. Every tool shows its math.', 'gamely' );
+		$desc = __( 'Free lawn, garden and yard calculators for homeowners: sprinkler run times, fertilizer, grass seed, sod, raised bed soil, mulch, gravel and paver base. Every tool shows its math.', 'gamely' );
 	} elseif ( is_home() ) {
 		$desc = __( 'Practical, sourced guides for lawn, garden and yard projects: when to fertilize, how to water new seed, overseeding, sod, soil tests and more.', 'gamely' );
 	} elseif ( is_singular() ) {
@@ -252,7 +262,7 @@ add_filter( 'the_content', function ( $content ) {
 function gamely_nav() {
 	$current = gamely_current_tool();
 	echo '<ul class="g-nav__list">';
-	foreach ( array( 'lawn', 'garden' ) as $cat ) {
+	foreach ( array_keys( gamely_categories() ) as $cat ) {
 		$tools = gamely_tools_in( $cat );
 		if ( ! $tools ) {
 			continue;

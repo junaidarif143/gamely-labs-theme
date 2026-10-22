@@ -10,9 +10,9 @@
 			<p><?php esc_html_e( 'Free lawn, garden and yard calculators for homeowners. Plan the project, skip the guesswork.', 'gamely' ); ?></p>
 		</div>
 
-		<?php foreach ( array( 'lawn', 'garden' ) as $cat ) : $tools = gamely_tools_in( $cat ); if ( ! $tools ) { continue; } ?>
+		<?php foreach ( array_keys( gamely_categories() ) as $cat ) : $tools = gamely_tools_in( $cat ); if ( ! $tools ) { continue; } ?>
 		<div class="g-footer__col">
-			<h2><?php echo esc_html( 'lawn' === $cat ? __( 'Lawn', 'gamely' ) : __( 'Garden', 'gamely' ) ); ?></h2>
+			<h2><?php echo esc_html( gamely_cat_label( $cat, true ) ); ?></h2>
 			<ul>
 				<?php foreach ( $tools as $tool ) : ?>
 					<li><a href="<?php echo esc_url( gamely_tool_url( $tool ) ); ?>"><?php echo esc_html( $tool['short'] ); ?></a></li>
