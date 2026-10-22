@@ -7,7 +7,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'GAMELY_VERSION', '1.2.0' );
+define( 'GAMELY_VERSION', '1.2.1' );
 
 /* ---------------------------------------------------------------
  * Setup
@@ -308,7 +308,8 @@ function gamely_byline() {
 	}
 	$parts[] = sprintf( __( 'Updated %s', 'gamely' ), esc_html( get_the_modified_date( 'F Y' ) ) );
 	if ( false !== stripos( get_post_field( 'post_content', get_the_ID() ), '<h2>Sources</h2>' ) ) {
-		$parts[] = '<a href="#sources">' . esc_html__( 'Sources: university extension guides', 'gamely' ) . '</a>';
+		// Plain "Sources": tool pages cite extension services, manufacturers or suppliers, as listed on each page.
+		$parts[] = '<a href="#sources">' . esc_html__( 'Sources', 'gamely' ) . '</a>';
 	}
 	return implode( ' · ', $parts );
 }
