@@ -51,13 +51,17 @@ while ( have_posts() ) :
 						<ul class="g-toc" id="g-toc"></ul>
 					</div>
 					<?php
-					$related = array_filter( gamely_tools(), function ( $t ) use ( $tool ) {
-						return $t['slug'] !== $tool['slug'];
-					} );
-					uasort( $related, function ( $a, $b ) use ( $tool ) {
-						return ( $b['cat'] === $tool['cat'] ) <=> ( $a['cat'] === $tool['cat'] );
-					} );
-					$related = array_slice( $related, 0, 3 );
+					// Same keyword cluster first (from the plugin); otherwise same category.
+					$related = function_exists( 'gl_tools_related' ) ? gl_tools_related( $tool['key'], 3 ) : array();
+					if ( ! $related ) {
+						$related = array_filter( gamely_tools(), function ( $t ) use ( $tool ) {
+							return $t['slug'] !== $tool['slug'];
+						} );
+						uasort( $related, function ( $a, $b ) use ( $tool ) {
+							return ( $b['cat'] === $tool['cat'] ) <=> ( $a['cat'] === $tool['cat'] );
+						} );
+						$related = array_slice( $related, 0, 3 );
+					}
 					if ( $related ) :
 						?>
 						<div class="g-panel">
