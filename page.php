@@ -44,6 +44,7 @@ while ( have_posts() ) :
 			<div class="g-layout">
 				<article class="g-main g-content" id="g-article">
 					<?php echo $content; // phpcs:ignore -- already filtered by the_content ?>
+					<?php gamely_author_box(); ?>
 				</article>
 				<aside class="g-side" aria-label="<?php esc_attr_e( 'More on this page', 'gamely' ); ?>">
 					<div class="g-panel" id="g-toc-panel" hidden>

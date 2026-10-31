@@ -45,6 +45,7 @@ while ( have_posts() ) :
 		<div class="g-layout">
 			<article class="g-main g-content" id="g-article">
 				<?php echo $content; // phpcs:ignore -- filtered by the_content ?>
+				<?php gamely_author_box(); ?>
 
 				<?php if ( $used ) : ?>
 					<section class="g-cta-tools" aria-labelledby="g-tools-in-guide">

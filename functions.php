@@ -7,7 +7,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'GAMELY_VERSION', '1.3.1' );
+define( 'GAMELY_VERSION', '1.4.0' );
 
 /* ---------------------------------------------------------------
  * Setup
@@ -398,6 +398,12 @@ add_action( 'wp_head', function () {
 		if ( $about ) {
 			$data['author']['url'] = get_permalink( $about );
 		}
+		$person = gamely_author_person();
+		if ( $person ) {
+			$data['author']['jobTitle'] = $person['role'];
+			$data['author']['image']    = $person['photo'];
+			$data['author']['worksFor'] = array( '@type' => 'Organization', 'name' => defined( 'GL_TOOLS_OWNER' ) ? GL_TOOLS_OWNER : get_bloginfo( 'name' ) );
+		}
 	}
 	echo '<script type="application/ld+json">' . wp_json_encode( $data ) . '</script>' . "\n";
 }, 3 );
@@ -420,4 +426,41 @@ add_filter( 'the_content', function ( $content ) {
 /** "Related guides" for a tool page (from the plugin's tool tags). */
 function gamely_related_guides( $tool_key ) {
 	return function_exists( 'gl_tools_guides_for' ) ? gl_tools_guides_for( $tool_key, 3 ) : array();
+}
+
+
+/* ---------------------------------------------------------------
+ * Author box (tools and guides)
+ * ------------------------------------------------------------- */
+
+/** The team member matching the byline author name, from the plugin's team list. */
+function gamely_author_person() {
+	if ( ! function_exists( 'gl_tools_team' ) ) {
+		return null;
+	}
+	$name = get_theme_mod( 'gamely_author', '' );
+	foreach ( gl_tools_team() as $person ) {
+		if ( $person['name'] === $name ) {
+			return $person;
+		}
+	}
+	return null;
+}
+
+function gamely_author_box() {
+	$person = gamely_author_person();
+	if ( ! $person ) {
+		return;
+	}
+	?>
+	<aside class="g-author" aria-label="<?php esc_attr_e( 'About the author', 'gamely' ); ?>">
+		<img class="g-author__photo" src="<?php echo esc_url( $person['photo'] ); ?>" alt="<?php echo esc_attr( $person['name'] ); ?>" width="72" height="72" loading="lazy">
+		<div>
+			<p class="g-author__kicker"><?php esc_html_e( 'Written by', 'gamely' ); ?></p>
+			<p class="g-author__name"><a href="<?php echo esc_url( home_url( $person['about'] ) ); ?>"><?php echo esc_html( $person['name'] ); ?></a></p>
+			<p class="g-author__role"><?php echo esc_html( $person['role'] ); ?></p>
+			<p class="g-author__bio"><?php echo esc_html( $person['bio'] ); ?></p>
+		</div>
+	</aside>
+	<?php
 }
