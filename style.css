@@ -3,7 +3,7 @@ Theme Name:   Gamely
 Theme URI:    https://gamelylabs.com/
 Author:       Gamely Labs
 Description:  Warm, fast theme for Gamely Labs lawn, garden and yard calculators. Pairs with the Gamely Labs Tools plugin.
-Version:      1.4.0
+Version:      1.5.0
 Update URI:   false
 Requires at least: 6.0
 Requires PHP: 7.4
@@ -213,6 +213,11 @@ h1, h2, h3, h4 { font-family: var(--g-display); font-weight: 600; color: var(--g
 .g-posts { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 20px; }
 .g-post-card { display: flex; flex-direction: column; gap: 8px; background: var(--g-surface); border: 1px solid var(--g-line); border-radius: var(--g-radius); padding: 22px 24px; transition: transform .15s ease, box-shadow .15s ease; }
 .g-post-card:hover { transform: translateY(-3px); box-shadow: 0 14px 30px rgba(60, 45, 20, 0.08); }
+.g-post-card__img { display: block; margin: -22px -24px 8px; border-radius: var(--g-radius) var(--g-radius) 0 0; overflow: hidden; background: var(--g-sand); aspect-ratio: 16 / 9; }
+.g-post-card__img img { display: block; width: 100%; height: 100%; object-fit: cover; }
+.g-figure { margin: 28px 0; }
+.g-figure img { display: block; width: 100%; height: auto; border-radius: 16px; border: 1px solid var(--g-line); background: var(--g-surface); }
+.g-figure figcaption { margin-top: 10px; font-size: 14.5px; line-height: 1.5; color: var(--g-muted); }
 .g-post-card__kicker { margin: 0; font-size: 12px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--g-soil); }
 .g-post-card h2, .g-post-card h3 { font-size: 21px; line-height: 1.3; margin: 0; }
 .g-post-card h2 a, .g-post-card h3 a { text-decoration: none; color: var(--g-forest-ink); }

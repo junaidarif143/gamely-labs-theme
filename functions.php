@@ -7,7 +7,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'GAMELY_VERSION', '1.4.0' );
+define( 'GAMELY_VERSION', '1.5.0' );
 
 /* ---------------------------------------------------------------
  * Setup
