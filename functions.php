@@ -7,7 +7,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'GAMELY_VERSION', '1.3.0' );
+define( 'GAMELY_VERSION', '1.3.1' );
 
 /* ---------------------------------------------------------------
  * Setup
@@ -193,7 +193,8 @@ add_action( 'wp_head', function () {
 		$og_title = __( 'Lawn & Garden Guides', 'gamely' ) . ' – ' . get_bloginfo( 'name' );
 		$og_url   = get_option( 'page_for_posts' ) ? get_permalink( get_option( 'page_for_posts' ) ) : home_url( '/' );
 	} elseif ( is_singular() ) {
-		$og_title = get_the_title( get_queried_object_id() );
+		// Same title as the <title> tag (which the plugin sets to the page's SEO title), minus the site name.
+		$og_title = trim( preg_replace( '/\s*[–|-]\s*' . preg_quote( get_bloginfo( 'name' ), '/' ) . '\s*$/u', '', html_entity_decode( wp_get_document_title(), ENT_QUOTES, 'UTF-8' ) ) );
 		$og_url   = get_permalink( get_queried_object_id() );
 	} else {
 		$og_title = wp_get_document_title();
