@@ -7,7 +7,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'GAMELY_VERSION', '1.2.1' );
+define( 'GAMELY_VERSION', '1.3.0' );
 
 /* ---------------------------------------------------------------
  * Setup
@@ -184,6 +184,42 @@ add_action( 'wp_head', function () {
 	if ( $desc ) {
 		echo '<meta name="description" content="' . esc_attr( wp_strip_all_tags( $desc ) ) . '">' . "\n";
 	}
+
+	// Social share tags (Facebook, WhatsApp, LinkedIn, X).
+	if ( is_front_page() ) {
+		$og_title = get_bloginfo( 'name' ) . ' – ' . get_bloginfo( 'description' );
+		$og_url   = home_url( '/' );
+	} elseif ( is_home() ) {
+		$og_title = __( 'Lawn & Garden Guides', 'gamely' ) . ' – ' . get_bloginfo( 'name' );
+		$og_url   = get_option( 'page_for_posts' ) ? get_permalink( get_option( 'page_for_posts' ) ) : home_url( '/' );
+	} elseif ( is_singular() ) {
+		$og_title = get_the_title( get_queried_object_id() );
+		$og_url   = get_permalink( get_queried_object_id() );
+	} else {
+		$og_title = wp_get_document_title();
+		$og_url   = '';
+	}
+	$og_image = has_post_thumbnail( get_queried_object_id() ) && is_singular()
+		? get_the_post_thumbnail_url( get_queried_object_id(), 'full' )
+		: get_template_directory_uri() . '/assets/og-default.png';
+	$tags = array(
+		'og:site_name'   => get_bloginfo( 'name' ),
+		'og:type'        => is_singular( 'post' ) ? 'article' : 'website',
+		'og:title'       => $og_title,
+		'og:description' => $desc ? wp_strip_all_tags( $desc ) : '',
+		'og:url'         => $og_url,
+		'og:image'       => $og_image,
+		'og:locale'      => 'en_US',
+	);
+	foreach ( $tags as $prop => $val ) {
+		if ( '' !== (string) $val ) {
+			echo '<meta property="' . esc_attr( $prop ) . '" content="' . esc_attr( $val ) . '">' . "\n";
+		}
+	}
+	if ( ! has_post_thumbnail( get_queried_object_id() ) || ! is_singular() ) {
+		echo '<meta property="og:image:width" content="1200">' . "\n" . '<meta property="og:image:height" content="630">' . "\n";
+	}
+	echo '<meta name="twitter:card" content="summary_large_image">' . "\n";
 
 	$tool = gamely_current_tool();
 	if ( $tool ) {
