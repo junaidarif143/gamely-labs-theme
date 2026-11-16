@@ -25,6 +25,9 @@
 		<div class="g-footer__col">
 			<h2><?php esc_html_e( 'Site', 'gamely' ); ?></h2>
 			<ul>
+				<?php $guides_page = (int) get_option( 'page_for_posts' ); if ( $guides_page ) : ?>
+					<li><a href="<?php echo esc_url( get_permalink( $guides_page ) ); ?>"><?php esc_html_e( 'Guides', 'gamely' ); ?></a></li>
+				<?php endif; ?>
 				<?php foreach ( $links as $link ) : ?>
 					<li><a href="<?php echo esc_url( $link['url'] ); ?>"><?php echo esc_html( $link['label'] ); ?></a></li>
 				<?php endforeach; ?>
